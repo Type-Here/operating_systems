@@ -30,6 +30,7 @@
 #include <errno.h>
 
 #include <sys/stat.h>
+#include <sys/wait.h>
 
 #define FILENAME "intList.bin"
 #define INTNUM 100000
@@ -154,6 +155,10 @@ int main(void) {
 
 	/*Send to parentWorker*/
 	parentWorker(pid, pipefd);
+
+	for(int i = 0; i < N_PROC; i++){
+		waitpid(pid[i], NULL, WUNTRACED);
+	}
 
 	return EXIT_SUCCESS;
 }
