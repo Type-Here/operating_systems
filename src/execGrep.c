@@ -44,7 +44,8 @@ int main(int argc, char * argv[]){
         fprintf(stderr, "Error creating child with fork : %s \n", strerror(errno));
         exit(1);
 
-    } else if(pid > 0){ //PARENT
+    /* -- PARENT -- */
+    } else if(pid > 0){
         
         char buffer[SIZE];
         int fd;
@@ -75,7 +76,9 @@ int main(int argc, char * argv[]){
 
         exit(0);
 
-    } else { // pid == 0 CHILD
+    /* -- CHILD -- */
+
+    } else { // pid == 0 
         close(pipefd[WRITE_END]);
         
         int fd;
@@ -93,5 +96,5 @@ int main(int argc, char * argv[]){
         exit(1); //Only if exec fails
     }
 
-    exit(1);
+    exit(1); //Exit in Main, JIC
 }
