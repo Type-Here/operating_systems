@@ -43,13 +43,12 @@
 /* -- New Include for Directories Management (Library functions ; man(3) ) -- */
 #include <dirent.h>
 
-#define EXERCISE 2 //Only to launch the correct exercise
+#define EXERCISE 3 //Only to launch the correct exercise
 
 /*FN DEF */
 void traccia1(char * dir);
 void traccia2(char * dir);
 void traccia3(char * dir, int livello, int * res);
-
 
 
 int main(int argc, char * argv[]) {
@@ -90,6 +89,7 @@ void traccia1(char *dir) {
 
 	if ((dirp = opendir(dir)) == NULL) {
 		fprintf(stderr, "Errore Opendir su %s : %s \n", dir, strerror(errno));
+		return;
 	}
 	printf("Traccia 1: Siamo in dir: %s \n", dir);
 	while ((direntry = readdir(dirp)) != NULL) {
@@ -113,11 +113,12 @@ void traccia2(char *dir) {
 	//Open directory
 	if ((dirp = opendir(dir)) == NULL) {
 		fprintf(stderr, "Errore Opendir su %s : %s \n", dir, strerror(errno));
+		return;
 	}
 
 	printf("\n-Siamo in dir: %s \n", dir);
 
-	//Run through current direntries
+		//Run through current direntries
 	while ((direntry = readdir(dirp)) != NULL) {
 		//Print Current Directory content: Name -> Dir or File
 		printf("%s -> %s \n", direntry->d_name, direntry->d_type == DT_DIR ? "dir" : "file");
@@ -155,6 +156,7 @@ void traccia3(char *dir, int livello, int *res) {
 	//Open directory
 	if ((dirp = opendir(dir)) == NULL) {
 		fprintf(stderr, "Errore Opendir su %s : %s \n", dir, strerror(errno));
+		return;
 	}
 
 	//Run through current direntries
