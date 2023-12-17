@@ -26,16 +26,16 @@
 #include <string.h>
 #include <time.h>
 
-#include <fcntl.h>
-#include <unistd.h>
-#include <dirent.h>
+#include <fcntl.h> //open, ...
+#include <unistd.h> //read, write, close, lseek, ...
+#include <dirent.h> //For opendir, readdir, ...
 
-#include <signal.h>
+#include <signal.h> //signals, kill, ...
 
-#include <sys/types.h>
+#include <sys/types.h> //es pid_t
 #include <sys/stat.h>
 #include <sys/wait.h>
-#include <sys/param.h>
+#include <sys/param.h> // Es MAXPATHLEN
 
 #include <errno.h>
 
@@ -165,8 +165,9 @@ void handlerSigUsr(int sig){
     off_t middleSeek;
     ssize_t bytesRead;
 
-    char buffer[10240];
-    char temp[5124];
+    char buffer[10240] = {0}; //Inizialize to 0 avoids error in write (valgrind check)
+    char temp[5124] = {0};
+
     char * addtxt = {"Sono Mercoledì in Mezzo alla Settimana"};
 
     printf("\n%d: Stat Result for %s: \n", mypid, fileToPrintStat);
@@ -259,20 +260,20 @@ void exitHandler(int sig){
  * @param pipefd[2] pipe to communicate with the parent
 */
 void firstsChildrenWorker(char * path, int pipefd[2]){
-    char result[MAXPATHLEN];
     struct statAndName sb;
     off_t size = 0;
 
     close(pipefd[READ_END]);
     
+    memset(sb.name, 0, sizeof(sb.name)); //initialize sb.name (no eventual uninitialized bytes in write)
     /* Find Largest File in Path */
-    findBigger(path, result, &size);
-    printf("From Child %d: Found %s\n", getpid(), result);
+    findBigger(path, sb.name, &size);
+    printf("From Child %d: Found %s\n", getpid(), sb.name);
     
     /* Save info about largest file*/
-    strcpy(sb.name, result);
+    //strcpy(sb.name, result);
     
-    if(stat(result, &sb.sb) < 0){
+    if(stat(sb.name, &sb.sb) < 0){
         fprintf(stderr, "Error Exec Stat in Child %d to get Result File Info: %s \n", getpid(), strerror(errno));
         exit(1);
     }
@@ -284,7 +285,7 @@ void firstsChildrenWorker(char * path, int pipefd[2]){
     }
 
     /* Save Pointer to File Name in Global Variable to be used in handlerSigUsr */
-    fileToPrintStat = result;
+    fileToPrintStat = sb.name;
     
     printf("Child %d: Has Written\n", getpid());
 
@@ -374,7 +375,7 @@ int fatherWorker(pid_t * pid, int (*pipefd)[2]){
     char result3[MAXPATHLEN] = {0};
     struct statAndName childstat[NUMCHILD - 1];
     
-    /* Beacuse MAXPATHLEN is used in read, we receive seoareted data (name first, then stat) (except last child)
+    /* Beacuse MAXPATHLEN is used in read, we receive separated data (name first, then stat) (except last child)
      these pointers keep trace of where data is written in structs statAndName */
     void * pointer[NUMCHILD - 1]; 
     for(int i = 0; i < NUMCHILD - 1; i++){
@@ -428,7 +429,7 @@ int fatherWorker(pid_t * pid, int (*pipefd)[2]){
     /*Find Larger File between first and second child. Then set appropriate signals*/
 
     (childstat[0].sb.st_size >= childstat[1].sb.st_size) ? (childIndexLive = 0) : (childIndexLive = 1);
-    childIndexTerm = !childIndexLive; //Shortcut because there are only 2 children
+    childIndexTerm = !childIndexLive; //Shortcut because there are only 2 children to choose from
 
     if(kill(pid[childIndexLive], SIGUSR1) < 0){
         fprintf(stderr, "Error Sending SIGUSR1 to Child 1: %s \n", strerror(errno));
