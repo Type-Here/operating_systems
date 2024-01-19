@@ -4,7 +4,7 @@
  Author      : Man
  Version     :
  Copyright   : GPL 3.0
- Description : Hello World in C, Ansi-style
+ Description : Test Stat
  ============================================================================
  * Scrivere Programma C:
  * Crea un file, scrive 10 interi in file,
