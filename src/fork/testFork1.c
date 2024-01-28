@@ -59,6 +59,7 @@ int creaFigliEConta(int start, int end, pid_t * childpids, int index){
 	} else {
 
 		fprintf(stderr, "Unable to create Child ");
+		exit(EXIT_FAILURE);
 	}
 
 	return 0;
