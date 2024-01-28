@@ -50,17 +50,20 @@ int childLs( int argc, char * argv[]){
 		int fd;
 
 		if( (fd=open(OUTPUT, O_CREAT | O_WRONLY | O_TRUNC, 0640)) < 0 ){
-			fprintf(stderr, "Errore Apertura File Output in %s\n", OUTPUT);
+			fprintf(stderr, "Error Opening Output File in %s\n", OUTPUT);
+			exit(EXIT_FAILURE);
 		}
 
 		if( (dup2(fd, STDOUT_FILENO)) < 0 ){
-			fprintf(stderr, "Errore dup2 \n");
+			fprintf(stderr, "Error dup2 \n");
+			exit(EXIT_FAILURE);
 		}
 
 		/*printf("\nfd di %s: %d \nfd stdout: %d \nnewfd: %d\n", output, fd, STDOUT_FILENO, newfd);*/
 
 		if( (execv(ls, argvLs)) < 0 ){
-			fprintf(stderr, "Errore Exec\n");
+			fprintf(stderr, "Error Exec\n");
+			exit(EXIT_FAILURE);
 		}
 
 	} else if(child > 0){ //Parent
@@ -69,7 +72,8 @@ int childLs( int argc, char * argv[]){
 		free(argvLs);
 
 	} else { //Error Handling
-		fprintf(stderr, "Errore Fork.\n");
+		fprintf(stderr, "Error Fork.\n");
+		exit(EXIT_FAILURE);
 	}
 
 	return wstatus;
