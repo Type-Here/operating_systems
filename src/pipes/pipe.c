@@ -2,9 +2,9 @@
  ============================================================================
  Name        : pipe.c
  Author      : Man
- Version     :
+ Version     : Base Exercise
  Copyright   : GPL 3.0
- Description : Hello World in C, Ansi-style
+ Description : Basic Exercise, to Start with. A better version is pipe2.c (minimum suggested)
  ============================================================================
  Scrivere un programma C in cui:
 
@@ -30,7 +30,7 @@
 
 #define FILE_TXT "file.txt"
 
-int isVocal(char ch){
+int isVowel(char ch){
 	return (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u' || ch == 'y');
 }
 
@@ -161,7 +161,7 @@ int main() {
 			while( (bytesReadCh = read(pipeFdToCh[PIPE_READ], &ch, 1)) > 0){
 				printf("%c", ch);
 
-				if(!isVocal(ch) ){
+				if(!isVowel(ch) ){
 					buffer[bufSize++] = ch;
 				} else {numVocals++;}
 
