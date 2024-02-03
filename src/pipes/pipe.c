@@ -6,6 +6,8 @@
  Copyright   : GPL 3.0
  Description : Basic Exercise, to Start with. A better version is pipe2.c (minimum suggested)
  ============================================================================
+ NB Esercizio Base, per esame vedere almeno pipe2.c
+
  Scrivere un programma C in cui:
 
 - Il processo padre apre 2 pipe e crea un processo figlio
@@ -139,7 +141,7 @@ int main() {
 			printf("\n\tcontinued\n");
 		}
 
-		printf("\tNum of Vocals removed = %d \n", WEXITSTATUS(wstatus));
+		printf("\tNum of Vowels removed = %d \n", WEXITSTATUS(wstatus));
 
 	} else { //I'm in child
 
