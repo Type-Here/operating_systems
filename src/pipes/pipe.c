@@ -31,8 +31,7 @@
 #define FILE_TXT "file.txt"
 
 int isVocal(char ch){
-	if(ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u' || ch == 'y') return 1;
-	return 0;
+	return (ch == 'a' || ch == 'e' || ch == 'i' || ch == 'o' || ch == 'u' || ch == 'y');
 }
 
 int main() {
