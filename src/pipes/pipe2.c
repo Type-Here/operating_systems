@@ -78,8 +78,6 @@ int main() {
         //Read from file in chunk and send line by line
 		while( (bytesRead = read(fd, chunk, CHUNKSIZE)) > 0 ){
             strcat(readch, chunk);
-            printf("Chunk: %s \n", chunk);
-            printf("readch: %s \n", readch);
             remnants = sendToChild(readch, bytesRead, child, pipes_fd);
             memset(readch, '\0', 2*CHUNKSIZE);
             
